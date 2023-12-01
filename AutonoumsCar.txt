@@ -1,0 +1,126 @@
+   1- Ultrasonic Sensor with Servo Motor (180-degree scanning):
+
+
+#include <Servo.h>
+
+const int trigPin = 9; // Replace with actual trig pin
+const int echoPin = 10; // Replace with actual echo pin
+Servo ultrasonicServo;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  ultrasonicServo.attach(6); // Replace with actual servo pin
+}
+
+int getDistance() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  int duration = pulseIn(echoPin, HIGH);
+  int distance = duration * 0.034 / 2;
+
+  return distance;
+}
+
+void scanWithServo() {
+  for (int angle = 0; angle <= 180; angle += 10) {
+    ultrasonicServo.write(angle);
+    delay(100); // Adjust delay based on servo speed
+    int distance = getDistance();
+    // Handle distance data as needed
+  }
+}
+
+void loop() {
+  // Your main loop logic
+  scanWithServo();
+  // Continue with other tasks
+  delay(1000); // Adjust delay based on loop frequency
+}
+
+
+
+  2-L293D Motor Driver:
+
+
+int motor1A = 2; // Replace with actual pin
+int motor1B = 3; // Replace with actual pin
+int motor2A = 4; // Replace with actual pin
+int motor2B = 5; // Replace with actual pin
+
+void setup() {
+  pinMode(motor1A, OUTPUT);
+  pinMode(motor1B, OUTPUT);
+  pinMode(motor2A, OUTPUT);
+  pinMode(motor2B, OUTPUT);
+}
+
+void moveForward() {
+  digitalWrite(motor1A, HIGH);
+  digitalWrite(motor1B, LOW);
+  digitalWrite(motor2A, HIGH);
+  digitalWrite(motor2B, LOW);
+}
+
+void stopMotors() {
+  digitalWrite(motor1A, LOW);
+  digitalWrite(motor1B, LOW);
+  digitalWrite(motor2A, LOW);
+  digitalWrite(motor2B, LOW);
+}
+
+void turnLeft() {
+  digitalWrite(motor1A, LOW);
+  digitalWrite(motor1B, LOW);
+  digitalWrite(motor2A, HIGH);
+  digitalWrite(motor2B, LOW);
+}
+
+void loop() {
+  // Your main loop logic
+  moveForward();
+  delay(2000); // Move forward for 2 seconds (adjust based on your needs)
+  stopMotors();
+  delay(500); // Stop for 0.5 seconds
+  turnLeft();
+  delay(1000); // Turn left for 1 second (adjust based on your needs)
+  stopMotors();
+  // Continue with other tasks
+  delay(1000); // Adjust delay based on loop frequency
+}
+
+
+
+
+
+  3-LCD Display (assuming I2C):
+
+
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Replace with actual I2C address
+
+void setup() {
+  lcd.begin(16, 2);
+  lcd.print("Self-Driving Car");
+}
+
+void updateLCD(const char* message) {
+  lcd.clear();
+  lcd.print(message);
+}
+
+void loop() {
+  // Your main loop logic
+  updateLCD("Moving Forward");
+  // Continue with other tasks
+  delay(1000); // Adjust delay based on loop frequency
+}
+
